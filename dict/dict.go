@@ -7,16 +7,14 @@ import (
 	pp "github.com/k0kubun/pp/v3"
 )
 
-type dict map[interface{}]interface{}
+type Dict map[interface{}]interface{}
 
 type keyPair struct {
 	key, value interface{}
 }
 
-type RawMap dict
-
-func Dict(vals ...RawMap) *dict {
-	t := make(dict)
+func MakeDict(vals ...Dict) *Dict {
+	t := make(Dict)
 
 	if len(vals) > 0 {
 		for _, val := range vals {
@@ -28,7 +26,7 @@ func Dict(vals ...RawMap) *dict {
 	return &t
 }
 
-func (d *dict) String() string {
+func (d *Dict) String() string {
 
 	mypp := pp.New()
 	mypp.SetColoringEnabled(false)
@@ -36,7 +34,7 @@ func (d *dict) String() string {
 
 }
 
-func (d *dict) Update(obj ...interface{}) error {
+func (d *Dict) Update(obj ...interface{}) error {
 	if len(obj) == 0 {
 		err_msg := "Must supply Update method with a value"
 		return errors.New(err_msg)
@@ -44,14 +42,14 @@ func (d *dict) Update(obj ...interface{}) error {
 
 	main_obj := obj[0]
 	switch main_obj.(type) {
-	case *dict:
-		dd, _ := main_obj.(*dict)
+	case *Dict:
+		dd, _ := main_obj.(*Dict)
 		for k, v := range *dd {
 			(*d)[k] = v
 		}
 
-	case dict:
-		dd, _ := main_obj.(dict)
+	case Dict:
+		dd, _ := main_obj.(Dict)
 		for k, v := range dd {
 			(*d)[k] = v
 		}
@@ -68,22 +66,22 @@ func (d *dict) Update(obj ...interface{}) error {
 	return nil
 }
 
-func (d *dict) Clear() {
+func (d *Dict) Clear() {
 	for k := range *d {
 		delete(*d, k)
 	}
 
 }
 
-func (d *dict) Copy() *dict {
-	cpy_dict := Dict()
+func (d *Dict) Copy() *Dict {
+	cpy_dict := Dict{}
 	for k, v := range *d {
 		cpy_dict.Update(k, v)
 	}
-	return cpy_dict
+	return &cpy_dict
 }
 
-func (d *dict) Get(key interface{}) (*interface{}, error) {
+func (d *Dict) Get(key interface{}) (*interface{}, error) {
 	err_msg := fmt.Sprintf("no such key: %s", key)
 
 	value, exists := (*d)[key]
@@ -93,7 +91,7 @@ func (d *dict) Get(key interface{}) (*interface{}, error) {
 	return &value, nil
 }
 
-func (d *dict) Items() []keyPair {
+func (d *Dict) Items() []keyPair {
 	keyPairs := make([]keyPair, len(*d))
 
 	i := 0
