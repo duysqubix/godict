@@ -10,7 +10,7 @@ import (
 type Dict map[interface{}]interface{}
 
 type keyPair struct {
-	key, value interface{}
+	Key, Value interface{}
 }
 
 func MakeDict(vals ...Dict) *Dict {
