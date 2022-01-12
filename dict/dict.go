@@ -116,7 +116,7 @@ func (d *Dict) Items() []keyPair {
 
 	i := 0
 	for k, v := range *d {
-		kp := keyPair{key: k, value: v}
+		kp := keyPair{Key: k, Value: v}
 		keyPairs[i] = kp
 		i++
 	}
