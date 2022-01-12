@@ -9,23 +9,13 @@ import (
 
 type dict map[interface{}]interface{}
 
-type DictInterface interface {
-	Clear()
-	Update(obj ...interface{}) (int, error)
-	Copy() DictInterface
-	Get(key interface{}) interface{}
+type keyPair struct {
+	key, value interface{}
 }
-
-// type dict struct {
-// 	data RawDict
-// }
 
 type RawMap dict
 
 func Dict(vals ...RawMap) *dict {
-	// return &dict{
-	// 	make(RawDict),
-	// }
 	t := make(dict)
 
 	if len(vals) > 0 {
@@ -101,4 +91,17 @@ func (d *dict) Get(key interface{}) (*interface{}, error) {
 		return nil, errors.New(err_msg)
 	}
 	return &value, nil
+}
+
+func (d *dict) Items() []keyPair {
+	keyPairs := make([]keyPair, len(*d))
+
+	i := 0
+	for k, v := range *d {
+		kp := keyPair{key: k, value: v}
+		keyPairs[i] = kp
+		i++
+	}
+
+	return keyPairs
 }
