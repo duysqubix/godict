@@ -91,6 +91,26 @@ func (d *Dict) Get(key interface{}) (*interface{}, error) {
 	return &value, nil
 }
 
+func (d *Dict) Keys() []interface{} {
+	keys := make([]interface{}, len(*d))
+	i := 0
+	for k, _ := range *d {
+		keys[i] = k
+		i++
+	}
+	return keys
+}
+
+func (d *Dict) Values() []interface{} {
+	values := make([]interface{}, len(*d))
+	i := 0
+	for _, v := range *d {
+		values[i] = v
+		i++
+	}
+	return values
+}
+
 func (d *Dict) Items() []keyPair {
 	keyPairs := make([]keyPair, len(*d))
 
