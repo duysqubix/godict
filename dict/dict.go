@@ -7,7 +7,18 @@ import (
 	pp "github.com/k0kubun/pp/v3"
 )
 
+type DictInterface interface {
+	Update(obj ...interface{}) error
+	Copy() *Dict
+	Get(key interface{}) (*interface{}, error)
+	Keys() []interface{}
+	Items() []keyPair
+	Values() []interface{}
+}
+
 type Dict map[interface{}]interface{}
+
+var _ DictInterface = (*Dict)(nil)
 
 type keyPair struct {
 	Key, Value interface{}
